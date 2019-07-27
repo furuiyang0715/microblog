@@ -24,7 +24,8 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    if form.validate_on_submit():
+    if form.validate_on_submit():  # 将执行表单的校验工作 全部成功返回 True 有失败的就返回 False
+        # 调用 flash 的时候 会将消息存储在 flask 中 但是不会显示出来
         flash('Login requested for user {}, remember_me={}'.format(
             form.username.data, form.remember_me.data))
         return redirect('/index')
