@@ -26,6 +26,9 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # current_user 是 通过 load user 加载到的一个当前用户对象
+    # 这个变量的值可以是数据库中的一个用户对象（Flask-Login通过我上面提供的用户加载函数回调读取），
+    # 或者如果用户还没有登录，则是一个特殊的匿名用户对象。
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
