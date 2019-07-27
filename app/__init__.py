@@ -16,6 +16,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 # 对 flask-login 插件的
 login = LoginManager(app)
+login.login_view = 'login'
 # flask-login 的常用属性：
 # is_authenticated: 一个用来表示用户是否通过登录认证的属性，用True和False表示。
 # is_active: 如果用户账户是活跃的，那么这个属性是True，否则就是False
