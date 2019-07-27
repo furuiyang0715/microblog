@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, flash, redirect
+from flask import render_template, flash, redirect, url_for
 
 from app.form import LoginForm
 
@@ -29,5 +29,5 @@ def login():
         # 一旦通过get_flashed_messages函数请求了一次，它们就会从消息列表中移除，所以在调用flash()函数后它们只会出现一次。
         flash('Login requested for user {}, remember_me={}'.format(
             form.username.data, form.remember_me.data))
-        return redirect('/index')
+        return redirect(url_for("/index"))
     return render_template('login.html', title='Sign In', form=form)
