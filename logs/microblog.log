@@ -76,3 +76,4 @@ sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed
 2019-07-28 10:43:16,176 INFO: Microblog startup [in /Users/furuiyang/codes/microblog/app/__init__.py:58]
 2019-07-28 10:44:14,173 INFO: Microblog startup [in /Users/furuiyang/codes/microblog/app/__init__.py:58]
 2019-07-28 10:53:06,318 INFO: Microblog startup [in /Users/furuiyang/codes/microblog/app/__init__.py:58]
+2019-07-28 12:35:59,143 INFO: Microblog startup [in /Users/furuiyang/codes/microblog/app/__init__.py:61]

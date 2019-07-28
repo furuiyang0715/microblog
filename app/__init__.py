@@ -4,6 +4,7 @@ from logging.handlers import SMTPHandler, RotatingFileHandler
 
 from flask import Flask
 from flask_login import LoginManager
+from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
@@ -27,6 +28,8 @@ login.login_view = 'login'
 # （译者注：活跃用户的定义是该用户的登录状态是否通过用户名密码登录，通过“记住我”功能保持登录状态的用户是非活跃的）。
 # is_anonymous: 常规用户的该属性是False，对特定的匿名用户是True。
 # get_id(): 返回用户的唯一id的方法，返回值类型是字符串(Python 2下返回unicode字符串).
+mail = Mail(app)
+
 
 if not app.debug:
 
