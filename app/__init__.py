@@ -3,6 +3,7 @@ import os
 from logging.handlers import SMTPHandler, RotatingFileHandler
 
 from flask import Flask
+from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_migrate import Migrate
@@ -29,6 +30,8 @@ login.login_view = 'login'
 # is_anonymous: 常规用户的该属性是False，对特定的匿名用户是True。
 # get_id(): 返回用户的唯一id的方法，返回值类型是字符串(Python 2下返回unicode字符串).
 mail = Mail(app)
+
+bootstrap = Bootstrap(app)
 
 
 if not app.debug:
