@@ -19,4 +19,6 @@ class Config(object):
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     ADMINS = ['2564493603@qq.com']
 
+    LANGUAGES = ['en', 'es', 'zh']
+
     POSTS_PER_PAGE = 25
