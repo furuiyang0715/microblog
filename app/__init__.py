@@ -1,6 +1,8 @@
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
+
+from elasticsearch import Elasticsearch
 from flask import Flask, request, current_app
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -33,6 +35,11 @@ def create_app(config_class=Config):
     bootstrap.init_app(app)
     moment.init_app(app)
     babel.init_app(app)
+
+    # 添加一个 es 的实例
+    # Python 对象在结构上并不严格 可以随时添加新属性
+    app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']]) \
+        if app.config['ELASTICSEARCH_URL'] else None
 
     from app.errors import bp as errors_bp
     app.register_blueprint(errors_bp)

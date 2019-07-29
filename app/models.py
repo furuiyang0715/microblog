@@ -6,7 +6,7 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 from app import db, login
-
+from app.search import query_index, add_to_index, remove_from_index
 
 followers = db.Table(
     'followers',
@@ -82,7 +82,56 @@ def load_user(id):
     return User.query.get(int(id))
 
 
-class Post(db.Model):
+class SearchableMixin(object):
+    # 类方法 一旦连接到 Post 模型上
+    # 该方法将被调用为 Post.search() 而不必实例化
+    @classmethod
+    def search(cls, expression, page, per_page):
+        ids, total = query_index(cls.__tablename__, expression, page, per_page)
+        if total == 0:
+            return cls.query.filter_by(id=0), 0
+        # 将对象列表id替换为实例对象
+        when = []
+        for i in range(len(ids)):
+            when.append((ids[i], i))
+        # db.case when 语法
+        # es 的查询结果不是有序的 需要进行自行排序
+        return cls.query.filter(cls.id.in_(ids)).order_by(
+            db.case(when, value=cls.id)), total
+
+    @classmethod
+    def before_commit(cls, session):
+        # 与 after_commit 分别对应 sqlalchemy 的两个事件
+        # 分别在提交发生之前和发生之后触发
+
+        # 将其写入会话提交后仍然存在的地方，因为一旦会话被提交，我将使用它们来更新Elasticsearch索引
+        session._changes = {
+            'add': [obj for obj in session.new if isinstance(obj, cls)],
+            'update': [obj for obj in session.dirty if isinstance(obj, cls)],
+            'delete': [obj for obj in session.deleted if isinstance(obj, cls)]
+        }
+
+    @classmethod
+    def after_commit(cls, session):
+        # 成功提交
+        # 对象具有在 before_commit 中添加的 _changes 对象
+        for obj in session._changes['add']:
+            add_to_index(cls.__tablename__, obj)
+        for obj in session._changes['update']:
+            add_to_index(cls.__tablename__, obj)
+        for obj in session._changes['delete']:
+            remove_from_index(cls.__tablename__, obj)
+        session._changes = None
+
+    @classmethod
+    def reindex(cls):
+        for obj in cls.query:
+            add_to_index(cls.__tablename__, obj)
+
+
+class Post(SearchableMixin, db.Model):
+    # 定义该属性 列出需要包含在索引中的字段
+    __searchable__ = ['body']
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
@@ -91,3 +140,13 @@ class Post(db.Model):
 
     def __repr__(self):
         return '<Post {}>'.format(self.body)
+
+
+# 添加监听
+db.event.listen(db.session, 'before_commit', Post.before_commit)
+db.event.listen(db.session, 'after_commit', Post.after_commit)
+
+# 使用 Post 的 reindex() 来初始化当前在数据库中的所有用户动态的索引
+# Post.reindex()
+
+

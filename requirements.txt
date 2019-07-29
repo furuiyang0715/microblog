@@ -5,6 +5,7 @@ certifi==2019.6.16
 chardet==3.0.4
 Click==7.0
 dominate==2.3.5
+elasticsearch==7.0.2
 Flask==1.1.1
 Flask-Babel==0.12.2
 Flask-Bootstrap==3.3.7.1

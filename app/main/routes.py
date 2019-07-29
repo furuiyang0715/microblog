@@ -5,18 +5,10 @@ from flask_login import current_user, login_required
 from flask_babel import _, get_locale
 from guess_language import guess_language
 from app import db
-from app.main.forms import EditProfileForm, PostForm
+from app.main.forms import EditProfileForm, PostForm, SearchForm
 from app.models import User, Post
 from app.translate import translate
 from app.main import bp
-
-
-@bp.before_app_request
-def before_request():
-    if current_user.is_authenticated:
-        current_user.last_seen = datetime.utcnow()
-        db.session.commit()
-    g.locale = str(get_locale())
 
 
 @bp.route('/', methods=['GET', 'POST'])
@@ -131,3 +123,36 @@ def translate_text():
     return jsonify({'text': translate(request.form['text'],
                                       request.form['source_language'],
                                       request.form['dest_language'])})
+
+
+@bp.before_app_request
+def before_request():
+    # 在请求处理前的处理器中初始化搜索表单
+    if current_user.is_authenticated:
+        # 当用户已经认证的时候 创建一个搜索表单的对象
+        current_user.last_seen = datetime.utcnow()
+        db.session.commit()
+        # 这个表单对象要一直存在 直到它可以在请求结束的时候进行渲染
+        # 将其保存在Flask提供的g容器。这个g变量是应用可以存储需要在整个请求期间持续存在的数据的地方
+        # 这个g变量对每个请求和每个客户端都是特定的，因此即使你的Web服务器一次为不同的客户端处理多个请求，
+        # 仍然可以依靠g来专用存储各个请求的对应变量。
+        g.search_form = SearchForm()
+    g.locale = str(get_locale())
+
+
+@bp.route('/search')
+@login_required
+def search():
+    # form.validate()，它只验证字段值，而不检查数据是如何提交的
+    if not g.search_form.validate():
+        return redirect(url_for('main.explore'))
+    page = request.args.get('page', 1, type=int)
+    posts, total = Post.search(g.search_form.q.data, page,
+                               current_app.config['POSTS_PER_PAGE'])
+    next_url = url_for('main.search', q=g.search_form.q.data, page=page + 1) \
+        if total > page * current_app.config['POSTS_PER_PAGE'] else None
+    prev_url = url_for('main.search', q=g.search_form.q.data, page=page - 1) \
+        if page > 1 else None
+    return render_template('search.html', title=_('Search'), posts=posts,
+                           next_url=next_url, prev_url=prev_url)
+
