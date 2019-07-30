@@ -5,3 +5,4 @@ migrations/
 .pot
 .DS_Store
 .log
+.pyc
