@@ -85,7 +85,24 @@ def create_app(config_class=Config):
 
 @babel.localeselector
 def get_locale():
-    return request.accept_languages.best_match(current_app.config['LANGUAGES'])
+    # Babel实例提供了一个localeselector装饰器。 为每个请求调用装饰器函数以选择用于该请求的语言
+    # 这里我使用了Flask中request对象的属性accept_languages。 request对象提供了一个高级接口，
+    # 用于处理客户端发送的带Accept-Language头部的请求。 该头部指定了客户端语言和区域设置首选项。
+    # 该头部的内容可以在浏览器的首选项页面中配置，默认情况下通常从计算机操作系统的语言设置中导入。
+    # 大多数人甚至不知道存在这样的设置，但是这是有用的，因为应用可以根据每个语言的权重，提供优选语言的列表。
+    # 下面是一个复杂的Accept-Languages头部的例子： Accept-Language: da, en-gb;q=0.8, en;q=0.7
+    # 要选择最佳语言，你需要将客户请求的语言列表与应用支持的语言进行比较，并使用客户端提供的权重，查找最佳语言。
+    # 这样做的逻辑有点复杂，但它已经全部封装在best_match()方法中了，
+    # 该方法将应用提供的语言列表作为参数并返回最佳选择。
+    # test_language = request.accept_languages.best_match(current_app.config['LANGUAGES'])
+    # print("===================")
+    # print(test_language)   # en
+    # print("===================")
+
+    # TODO 临时替换为 中文
+    return 'zh'
+
+    # return request.accept_languages.best_match(current_app.config['LANGUAGES'])
 
 
 from app import models

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-07-28 17:08+0800\n"
+"POT-Creation-Date: 2019-07-30 14:03+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,226 +17,259 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.7.0\n"
 
-#: app/__init__.py:25
+#: app/__init__.py:20
 msgid "Please log in to access this page."
 msgstr ""
 
-#: app/email.py:23
+#: app/translate.py:73
+msgid "Error: the translation service is not configured."
+msgstr ""
+
+#: app/translate.py:92
+msgid "Error: the translation service failed."
+msgstr ""
+
+#: app/auth/email.py:8
 msgid "[Microblog] Reset Your Password"
-msgstr "重置密码"
+msgstr ""
 
-#: app/forms.py:11 app/forms.py:18 app/forms.py:51
+#: app/auth/forms.py:9 app/auth/forms.py:16 app/main/forms.py:10
 msgid "Username"
-msgstr "用户名"
+msgstr ""
 
-#: app/forms.py:12 app/forms.py:20 app/forms.py:43
+#: app/auth/forms.py:10 app/auth/forms.py:18 app/auth/forms.py:41
 msgid "Password"
-msgstr "密码"
+msgstr ""
 
-#: app/forms.py:13
+#: app/auth/forms.py:11
 msgid "Remember Me"
-msgstr "记住密码"
+msgstr ""
 
-#: app/forms.py:14 app/routes.py:74 app/templates/login.html:5
+#: app/auth/forms.py:12 app/auth/routes.py:28 app/templates/auth/login.html:5
 msgid "Sign In"
-msgstr "登录"
+msgstr ""
 
-#: app/forms.py:19 app/forms.py:38
+#: app/auth/forms.py:17 app/auth/forms.py:36
 msgid "Email"
-msgstr "邮箱"
+msgstr ""
 
-#: app/forms.py:22 app/forms.py:45
+#: app/auth/forms.py:20 app/auth/forms.py:43
 msgid "Repeat Password"
-msgstr "重置密码"
+msgstr ""
 
-#: app/forms.py:24 app/routes.py:95 app/templates/register.html:5
+#: app/auth/forms.py:22 app/auth/routes.py:49
+#: app/templates/auth/register.html:5
 msgid "Register"
-msgstr "注册"
+msgstr ""
 
-#: app/forms.py:29 app/forms.py:64
+#: app/auth/forms.py:27 app/main/forms.py:23
 msgid "Please use a different username."
-msgstr "用户名重复，请重置"
+msgstr ""
 
-#: app/forms.py:34
+#: app/auth/forms.py:32
 msgid "Please use a different email address."
-msgstr "邮箱已注册，请重置"
+msgstr ""
 
-#: app/forms.py:39 app/forms.py:47
+#: app/auth/forms.py:37 app/auth/forms.py:45
 msgid "Request Password Reset"
-msgstr "请求密码重置"
+msgstr ""
 
-#: app/forms.py:52
-msgid "About me"
-msgstr "关于我"
-
-#: app/forms.py:54 app/forms.py:69
-msgid "Submit"
-msgstr "提交"
-
-#: app/forms.py:68
-msgid "Say something"
-msgstr "说点什么吧"
-
-#: app/routes.py:30
-msgid "Your post is now live!"
-msgstr "发布成功！"
-
-#: app/routes.py:39 app/templates/base.html:22
-msgid "Home"
-msgstr "主页"
-
-#: app/routes.py:54 app/templates/base.html:23
-msgid "Explore"
-msgstr "探索"
-
-#: app/routes.py:67
+#: app/auth/routes.py:21
 msgid "Invalid username or password"
-msgstr "无效的用户名或者密码"
+msgstr ""
 
-#: app/routes.py:93
+#: app/auth/routes.py:47
 msgid "Congratulations, you are now a registered user!"
-msgstr "恭喜你，注册成功"
+msgstr ""
 
-#: app/routes.py:108
+#: app/auth/routes.py:63
 msgid "Check your email for the instructions to reset your password"
-msgstr "请查收邮箱按照指导重置密码"
+msgstr ""
 
-#: app/routes.py:111 app/templates/reset_password_request.html:5
+#: app/auth/routes.py:66 app/templates/auth/reset_password_request.html:5
 msgid "Reset Password"
-msgstr "重置密码"
+msgstr ""
 
-#: app/routes.py:125
+#: app/auth/routes.py:80
 msgid "Your password has been reset."
-msgstr "密码已重置"
+msgstr ""
 
-#: app/routes.py:153
+#: app/main/forms.py:11
+msgid "About me"
+msgstr ""
+
+#: app/main/forms.py:13 app/main/forms.py:28
+msgid "Submit"
+msgstr ""
+
+#: app/main/forms.py:27
+msgid "Say something"
+msgstr ""
+
+#: app/main/forms.py:32 app/main/routes.py:158
+msgid "Search"
+msgstr ""
+
+#: app/main/routes.py:27
+msgid "Your post is now live!"
+msgstr ""
+
+#: app/main/routes.py:36 app/templates/base.html:21
+msgid "Home"
+msgstr ""
+
+#: app/main/routes.py:51 app/templates/base.html:22
+msgid "Explore"
+msgstr ""
+
+#: app/main/routes.py:79
 msgid "Your changes have been saved."
-msgstr "修改已被保存"
+msgstr ""
 
-#: app/routes.py:158 app/templates/edit_profile.html:5
+#: app/main/routes.py:84 app/templates/edit_profile.html:5
 msgid "Edit Profile"
-msgstr "编辑个人资料"
+msgstr ""
 
-#: app/routes.py:167 app/routes.py:183
+#: app/main/routes.py:93 app/main/routes.py:109
 #, python-format
 msgid "User %(username)s not found."
-msgstr "用户 %(username)们 未找到"
+msgstr ""
 
-#: app/routes.py:170
+#: app/main/routes.py:96
 msgid "You cannot follow yourself!"
-msgstr "不支持关注自己"
+msgstr ""
 
-#: app/routes.py:174
+#: app/main/routes.py:100
 #, python-format
 msgid "You are following %(username)s!"
-msgstr "正在关注用户 %(username)s !"
+msgstr ""
 
-#: app/routes.py:186
+#: app/main/routes.py:112
 msgid "You cannot unfollow yourself!"
-msgstr "不支持取关自己"
+msgstr ""
 
-#: app/routes.py:190
+#: app/main/routes.py:116
 #, python-format
 msgid "You are not following %(username)s."
-msgstr "正在取关用户 %(username) "
-
-#: app/templates/404.html:4
-msgid "Not Found"
-msgstr "未找到"
-
-#: app/templates/404.html:5 app/templates/500.html:6
-msgid "Back"
-msgstr "回退"
-
-#: app/templates/500.html:4
-msgid "An unexpected error has occurred"
-msgstr "出现故障 ... "
-
-#: app/templates/500.html:5
-msgid "The administrator has been notified. Sorry for the inconvenience!"
-msgstr "管理员已经收到通知，抱歉给你带来不便"
+msgstr ""
 
 #: app/templates/_post.html:14
 #, python-format
 msgid "%(username)s said %(when)s"
-msgstr "用户 %(username) 发表于 %(when)"
+msgstr ""
 
-#: app/templates/base.html:5
+#: app/templates/_post.html:25
+msgid "Translate"
+msgstr ""
+
+#: app/templates/base.html:4
 msgid "Welcome to Microblog"
-msgstr "欢迎来到我的微博"
+msgstr ""
 
-#: app/templates/base.html:27
+#: app/templates/base.html:33
 msgid "Login"
-msgstr "登录"
+msgstr ""
 
-#: app/templates/base.html:29
+#: app/templates/base.html:35
 msgid "Profile"
-msgstr "个人主页"
+msgstr ""
 
-#: app/templates/base.html:30
+#: app/templates/base.html:36
 msgid "Logout"
-msgstr "登出"
+msgstr ""
+
+#: app/templates/base.html:73
+msgid "Error: Could not contact server."
+msgstr ""
 
 #: app/templates/index.html:5
 #, python-format
 msgid "Hi, %(username)s!"
-msgstr "你好呀，%(username) "
+msgstr ""
 
 #: app/templates/index.html:17 app/templates/user.html:31
 msgid "Newer posts"
-msgstr "较新发布"
+msgstr ""
 
 #: app/templates/index.html:22 app/templates/user.html:36
 msgid "Older posts"
-msgstr "较早发布"
+msgstr ""
 
-#: app/templates/login.html:12
-msgid "New User?"
-msgstr "新用户？"
+#: app/templates/search.html:4
+msgid "Search Results"
+msgstr ""
 
-#: app/templates/login.html:12
-msgid "Click to Register!"
-msgstr "点击注册"
+#: app/templates/search.html:13
+msgid "Previous results"
+msgstr ""
 
-#: app/templates/login.html:14
-msgid "Forgot Your Password?"
-msgstr "忘记密码？"
-
-#: app/templates/login.html:15
-msgid "Click to Reset It"
-msgstr "点击重置"
-
-#: app/templates/reset_password.html:5
-msgid "Reset Your Password"
-msgstr "重置你的密码"
+#: app/templates/search.html:18
+msgid "Next results"
+msgstr ""
 
 #: app/templates/user.html:8
 msgid "User"
-msgstr "用户"
+msgstr ""
 
 #: app/templates/user.html:11
 msgid "Last seen on"
-msgstr "上次浏览于"
+msgstr ""
 
 #: app/templates/user.html:13
 #, python-format
 msgid "%(count)d followers"
-msgstr "%(count)d 粉丝"
+msgstr ""
 
 #: app/templates/user.html:13
 #, python-format
 msgid "%(count)d following"
-msgstr "%(count)d 关注"
+msgstr ""
 
 #: app/templates/user.html:15
 msgid "Edit your profile"
-msgstr "编辑个人信息"
+msgstr ""
 
 #: app/templates/user.html:17
 msgid "Follow"
-msgstr "关注"
+msgstr ""
 
 #: app/templates/user.html:19
 msgid "Unfollow"
-msgstr "取关"
+msgstr ""
+
+#: app/templates/auth/login.html:12
+msgid "New User?"
+msgstr ""
+
+#: app/templates/auth/login.html:12
+msgid "Click to Register!"
+msgstr ""
+
+#: app/templates/auth/login.html:14
+msgid "Forgot Your Password?"
+msgstr ""
+
+#: app/templates/auth/login.html:15
+msgid "Click to Reset It"
+msgstr ""
+
+#: app/templates/auth/reset_password.html:5
+msgid "Reset Your Password"
+msgstr ""
+
+#: app/templates/errors/404.html:4
+msgid "Not Found"
+msgstr ""
+
+#: app/templates/errors/404.html:5 app/templates/errors/500.html:6
+msgid "Back"
+msgstr ""
+
+#: app/templates/errors/500.html:4
+msgid "An unexpected error has occurred"
+msgstr ""
+
+#: app/templates/errors/500.html:5
+msgid "The administrator has been notified. Sorry for the inconvenience!"
+msgstr ""
 

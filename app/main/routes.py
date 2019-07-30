@@ -19,7 +19,7 @@ def index():
     if form.validate_on_submit():
         language = guess_language(form.post.data)
         if language == 'UNKNOWN' or len(language) > 5:
-            language = ''
+            language = 'en'  # TODO
         post = Post(body=form.post.data, author=current_user,
                     language=language)
         db.session.add(post)
@@ -120,6 +120,7 @@ def unfollow(username):
 @bp.route('/translate', methods=['POST'])
 @login_required
 def translate_text():
+    # print(g.locale)   # en
     return jsonify({'text': translate(request.form['text'],
                                       request.form['source_language'],
                                       request.form['dest_language'])})
@@ -137,7 +138,8 @@ def before_request():
         # 这个g变量对每个请求和每个客户端都是特定的，因此即使你的Web服务器一次为不同的客户端处理多个请求，
         # 仍然可以依靠g来专用存储各个请求的对应变量。
         g.search_form = SearchForm()
-    g.locale = str(get_locale())
+    # g.locale = str(get_locale()) if get_locale() else "zh"  # TODO
+    g.locale = "zh"
 
 
 @bp.route('/search')
