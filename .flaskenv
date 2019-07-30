@@ -3,4 +3,7 @@ export FLASK_DEBUG=1
 export MAIL_SERVER=localhost
 export MAIL_PORT=8025
 export MS_TRANSLATOR_KEY=<paste-your-key-here>
+export YOUDAO_URL=https://openapi.youdao.com/api
+export YOUDAO_APP_KEY=0c5da03940d46b17
+export YOUDAO_APP_SECRET=bFsRiYrXoBK9sWI4nYTaMdf6fobMfhUv
 ELASTICSEARCH_URL=http://localhost:9200

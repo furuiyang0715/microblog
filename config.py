@@ -17,7 +17,13 @@ class Config(object):
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     ADMINS = ['your-email@example.com']
     LANGUAGES = ['en', 'es']
+    # 微软的翻译服务
     MS_TRANSLATOR_KEY = os.environ.get('MS_TRANSLATOR_KEY')
+    # 有道的翻译服务
+    YOUDAO_URL = os.environ.get("YOUDAO_URL")
+    YOUDAO_APP_KEY = os.environ.get("YOUDAO_APP_KEY")
+    YOUDAO_APP_SECRET = os.environ.get("YOUDAO_APP_SECRET")
+
     POSTS_PER_PAGE = 25
 
     ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
