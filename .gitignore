@@ -4,3 +4,4 @@ migrations/
 *.db
 .pot
 .DS_Store
+.log
