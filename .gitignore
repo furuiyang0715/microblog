@@ -1,6 +1,5 @@
 __pycache__/
 .idea/
-migrations/
 *.db
 .pot
 .DS_Store
