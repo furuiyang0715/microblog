@@ -131,7 +131,8 @@ class SearchableMixin(object):
             add_to_index(cls.__tablename__, obj)
 
 
-class Post(SearchableMixin, db.Model):
+class Post(db.Model):
+# class Post(SearchableMixin, db.Model):
     # 定义该属性 列出需要包含在索引中的字段
     __searchable__ = ['body']
     id = db.Column(db.Integer, primary_key=True)
@@ -144,11 +145,9 @@ class Post(SearchableMixin, db.Model):
         return '<Post {}>'.format(self.body)
 
 
-# 添加监听
-db.event.listen(db.session, 'before_commit', Post.before_commit)
-db.event.listen(db.session, 'after_commit', Post.after_commit)
-
-# 使用 Post 的 reindex() 来初始化当前在数据库中的所有用户动态的索引
-# Post.reindex()
-
-
+# # 添加监听
+# db.event.listen(db.session, 'before_commit', Post.before_commit)
+# db.event.listen(db.session, 'after_commit', Post.after_commit)
+#
+# # 使用 Post 的 reindex() 来初始化当前在数据库中的所有用户动态的索引
+# # Post.reindex()
