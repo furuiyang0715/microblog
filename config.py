@@ -23,7 +23,7 @@ class Config(object):
     YOUDAO_APP_KEY = os.environ.get("YOUDAO_APP_KEY")
     YOUDAO_APP_SECRET = os.environ.get("YOUDAO_APP_SECRET")
 
-    POSTS_PER_PAGE = 25
+    POSTS_PER_PAGE = 3
 
     ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
     BABEL_DEFAULT_LOCALE = "zh"

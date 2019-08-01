@@ -72,7 +72,6 @@ def translate(text, source_language, dest_language):
     if 'YOUDAO_APP_KEY' not in current_app.config or \
             not current_app.config['YOUDAO_APP_KEY']:
         return _('Error: the translation service is not configured.')
-    # 构造请求数据
     data = dict()
     data['from'] = "zh-CHS" if source_language == "zh" else source_language
     data['to'] = "zh-CHS" if dest_language == "zh" else dest_language

@@ -56,7 +56,7 @@ msgstr "邮箱"
 
 #: app/auth/forms.py:20 app/auth/forms.py:43
 msgid "Repeat Password"
-msgstr "重置密码"
+msgstr "确认密码"
 
 #: app/auth/forms.py:22 app/auth/routes.py:49
 #: app/templates/auth/register.html:5
@@ -223,8 +223,8 @@ msgstr "粉丝数: %(count)d"
 
 #: app/templates/user.html:13
 #, python-format
-msgid "关注: %(count)d"
-msgstr ""
+msgid "%(count)d following"
+msgstr "关注: %(count)d"
 
 #: app/templates/user.html:15
 msgid "Edit your profile"

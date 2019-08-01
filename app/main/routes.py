@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, g, \
-    jsonify, current_app
+    jsonify, current_app, session
 from flask_login import current_user, login_required
 from flask_babel import _, get_locale
 from guess_language import guess_language
@@ -133,8 +133,18 @@ def before_request():
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
         g.search_form = SearchForm()
-    # g.locale = str(get_locale()) if get_locale() else "zh"  # TODO
-    g.locale = "zh"
+        g.locale = session.get("lang", "zh")
+
+
+@bp.route('/lang', methods=['POST'])
+@login_required
+def toggle_language():
+    if request.args.get('lang') == "zh":
+        g.locale = "zh"
+    else:
+        g.locale = "en"
+    session['lang'] = g.locale
+    return '{}'
 
 
 @bp.route('/search')
@@ -152,3 +162,9 @@ def search():
     return render_template('search.html', title=_('Search'), posts=posts,
                            next_url=next_url, prev_url=prev_url)
 
+
+@bp.route('/user/<username>/popup')
+@login_required
+def user_popup(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    return render_template('user_popup.html', user=user)
