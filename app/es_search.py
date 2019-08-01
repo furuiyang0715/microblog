@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 from flask import current_app
 
 
@@ -16,8 +17,6 @@ def add_to_index(index, model):
     payload = {}
     for field in model.__searchable__:
         payload[field] = getattr(model, field)
-    # 不仅将 index 用做 索引名称，还将其用做文档类型
-    # Elasticsearch文档还需要一个唯一的标识符。 为此，我使用SQLAlchemy模型的id字段，该字段正好是唯一的
     current_app.elasticsearch.index(index=index, doc_type=index, id=model.id,
                                     body=payload)
 
@@ -50,10 +49,7 @@ def query_index(index, query, page, per_page):
         # doc_type=index,
         body={'query': {'multi_match': {'query': query, 'fields': ['*']}},
               'from': (page - 1) * per_page, 'size': per_page})
-    # multi_match，它可以跨多个字段进行搜索。 通过传递*的字段名称，我告诉Elasticsearch查看所有字段，
-    # 所以基本上我就是搜索了整个索引
     ids = [int(hit['_id']) for hit in search['hits']['hits']]
-    # 返回被击中的 post id 以及总的出现的次数
     return ids, search['hits']['total']
 
 # 为了保持数据清洁 在test之后进行索引的删除

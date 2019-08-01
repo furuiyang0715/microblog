@@ -11,9 +11,6 @@ def add_to_index(index, model):
             payload[field] = getattr(model, field)
         current_app.elasticsearch.index(index=index, doc_type=index, id=model.id,
                                         body=payload)
-    # elif current_app.whoosh:
-    #     pass
-
     else:
         return
 
@@ -27,10 +24,6 @@ def remove_from_index(index, model):
     """
     if current_app.elasticsearch:
         current_app.elasticsearch.delete(index=index, doc_type=index, id=model.id)
-
-    # elif current_app.whoosh:
-    #     pass
-
     else:
         return
 
@@ -52,12 +45,8 @@ def query_index(index, query, page, per_page):
                   'from': (page - 1) * per_page, 'size': per_page})
         ids = [int(hit['_id']) for hit in search['hits']['hits']]
         return ids, search['hits']['total']
-
-    elif current_app.whoosh:
-        pass
-
-    # else:
-    #     return [], 0
+    else:
+        return [], 0
 
 
 # test

@@ -129,15 +129,9 @@ def translate_text():
 
 @bp.before_app_request
 def before_request():
-    # 在请求处理前的处理器中初始化搜索表单
     if current_user.is_authenticated:
-        # 当用户已经认证的时候 创建一个搜索表单的对象
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
-        # 这个表单对象要一直存在 直到它可以在请求结束的时候进行渲染
-        # 将其保存在Flask提供的g容器。这个g变量是应用可以存储需要在整个请求期间持续存在的数据的地方
-        # 这个g变量对每个请求和每个客户端都是特定的，因此即使你的Web服务器一次为不同的客户端处理多个请求，
-        # 仍然可以依靠g来专用存储各个请求的对应变量。
         g.search_form = SearchForm()
     # g.locale = str(get_locale()) if get_locale() else "zh"  # TODO
     g.locale = "zh"
@@ -146,7 +140,6 @@ def before_request():
 @bp.route('/search')
 @login_required
 def search():
-    # form.validate()，它只验证字段值，而不检查数据是如何提交的
     if not g.search_form.validate():
         return redirect(url_for('main.explore'))
     page = request.args.get('page', 1, type=int)

@@ -6,4 +6,4 @@ export MS_TRANSLATOR_KEY=2463e5b388564adab43d74902815cf8c
 export YOUDAO_URL=https://openapi.youdao.com/api
 export YOUDAO_APP_KEY=0c5da03940d46b17
 export YOUDAO_APP_SECRET=bFsRiYrXoBK9sWI4nYTaMdf6fobMfhUv
-ELASTICSEARCH_URL=http://localhost:9200
+export DATABASE_URL=mysql+pymysql://root:ruiyang@127.0.0.1/microblog

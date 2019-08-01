@@ -90,7 +90,12 @@ class SearchableMixin(object):
     def search(cls, expression, page, per_page):
         ids, total = query_index(cls.__tablename__, expression, page, per_page)
         if total == 0:
-            return cls.query.filter_by(id=0), 0
+            # 使用数据库进行模糊查询
+            # return cls.query.filter_by(id=0), 0
+            posts = list(cls.query.filter(cls.body.like("%" + expression + "%")).order_by(cls.id))
+            total = len(posts)
+            return posts, total
+
         when = []
         for i in range(len(ids)):
             when.append((ids[i], i))
