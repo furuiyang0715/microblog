@@ -86,7 +86,7 @@ def create_app(config_class=Config):
 
 @babel.localeselector
 def get_locale():
-    print(f"==========={session.get('lang')}==============")
+    # print(f"==========={session.get('lang')}==============")
 
     return session.get('lang')
 

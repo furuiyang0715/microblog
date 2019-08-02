@@ -17,6 +17,7 @@
                     username=user_link, when=moment(post.timestamp).fromNow()) }}
                 <br>
                 <span id="post{{ post.id }}">{{ post.body }}</span>
+
                 {% if post.language and post.language != g.locale %}
                 <br><br>
                 <span id="translation{{ post.id }}">
@@ -27,6 +28,21 @@
                                 '{{ g.locale }}');">{{ _('Translate') }}</a>
                 </span>
                 {% endif %}
+
+{#                {% if post.user_id == g.user.id %}#}
+{#                <span onclick="delete({{ post.id }})">#}
+{#                    <a>{{ _('Delete') }}</a>#}
+{#                </span>#}
+{#                {% endif %}#}
+
             </td>
         </tr>
-    </table>
+</table>
+{#<script>#}
+{#    function delete(id) {#}
+{#        $.post('/delete?lid=' + id)#}
+{#            .done(function(response) {#}
+{#              location.reload()#}
+{#            })#}
+{#    }#}
+{#</script>#}

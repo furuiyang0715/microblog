@@ -25,6 +25,7 @@ class Config(object):
 
     POSTS_PER_PAGE = 3
 
-    ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
+    # ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL', None)
+    ELASTICSEARCH_URL = None
     BABEL_DEFAULT_LOCALE = "zh"
 

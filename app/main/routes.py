@@ -127,6 +127,12 @@ def translate_text():
                                       request.form['dest_language'])})
 
 
+# @bp.route('/delete', methods=['POST'])
+# @login_required
+# def delete():
+#     return jsonify({"text": "删除成功"})
+
+
 @bp.before_app_request
 def before_request():
     if current_user.is_authenticated:
@@ -134,6 +140,8 @@ def before_request():
         db.session.commit()
         g.search_form = SearchForm()
         g.locale = session.get("lang", "zh")
+        print(current_user)
+        g.user = current_user
 
 
 @bp.route('/lang', methods=['POST'])
