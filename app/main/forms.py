@@ -39,3 +39,10 @@ class SearchForm(FlaskForm):
             # 如果使用 字符串传递 需要将 csrf 禁用
             kwargs['csrf_enabled'] = False
         super(SearchForm, self).__init__(*args, **kwargs)
+
+
+class MessageForm(FlaskForm):
+    # 用来接收私有消息的表单类
+    message = TextAreaField(_l('Message'), validators=[
+        DataRequired(), Length(min=0, max=140)])
+    submit = SubmitField(_l('Submit'))

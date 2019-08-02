@@ -9,8 +9,10 @@
 - 在没有 es 的时候进行模糊查询 
 - 部署优化
 - 增加悬停特效
+- 时间日期国际化显示的 bug 修复
 
-### 
+### 8.2 更新 
+
 
 
 ### 部署流程 
@@ -35,6 +37,11 @@ docker tag microblog:latest furuiyang/microblog:latest
 docker push furuiyang/microblog:latest
 ```
 
+### 拉取服务 
+```
+docker pull furuiyang/microblog:latest
+```
+
 #### 启动 web 服务
 ```
 docker run --name microblog -d -p 8000:5000 --rm \
@@ -50,3 +57,6 @@ furuiyang/microblog:latest
 ### 其他
 - 9300 被占用 查看端口占用： netstat -ntlp
 - CREATE DATABASE `microblog` CHARACTER SET utf8 COLLATE utf8_general_ci;
+- 更新国际化语言包： 
+- flask translate update 
+- flask translate compile

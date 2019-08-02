@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-08-02 00:29+0800\n"
+"POT-Creation-Date: 2019-08-02 10:21+0800\n"
 "PO-Revision-Date: 2019-07-30 14:06+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: es\n"
@@ -99,7 +99,7 @@ msgstr ""
 msgid "About me"
 msgstr ""
 
-#: app/main/forms.py:14 app/main/forms.py:29
+#: app/main/forms.py:14 app/main/forms.py:29 app/main/forms.py:48
 msgid "Submit"
 msgstr ""
 
@@ -107,8 +107,12 @@ msgstr ""
 msgid "Say something"
 msgstr ""
 
-#: app/main/forms.py:33 app/main/routes.py:164
+#: app/main/forms.py:33 app/main/routes.py:170
 msgid "Search"
+msgstr ""
+
+#: app/main/forms.py:46
+msgid "Message"
 msgstr ""
 
 #: app/main/routes.py:28
@@ -154,6 +158,14 @@ msgstr ""
 msgid "You are not following %(username)s."
 msgstr ""
 
+#: app/main/routes.py:193
+msgid "Your message has been sent."
+msgstr ""
+
+#: app/main/routes.py:195
+msgid "Send Message"
+msgstr ""
+
 #: app/templates/_post.html:16
 #, python-format
 msgid "%(username)s said %(when)s"
@@ -161,10 +173,6 @@ msgstr ""
 
 #: app/templates/_post.html:28
 msgid "Translate"
-msgstr ""
-
-#: app/templates/_post.html:38
-msgid "Delete"
 msgstr ""
 
 #: app/templates/base.html:4
@@ -183,7 +191,11 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: app/templates/base.html:83
+#: app/templates/base.html:48 app/templates/message.html:4
+msgid "Messages"
+msgstr ""
+
+#: app/templates/base.html:88
 msgid "Error: Could not contact server."
 msgstr ""
 
@@ -192,12 +204,20 @@ msgstr ""
 msgid "Hi, %(username)s!"
 msgstr ""
 
-#: app/templates/index.html:17 app/templates/user.html:31
+#: app/templates/index.html:17 app/templates/user.html:34
 msgid "Newer posts"
 msgstr ""
 
-#: app/templates/index.html:22 app/templates/user.html:36
+#: app/templates/index.html:22 app/templates/user.html:39
 msgid "Older posts"
+msgstr ""
+
+#: app/templates/message.html:12
+msgid "Newer messages"
+msgstr ""
+
+#: app/templates/message.html:17
+msgid "Older messages"
 msgstr ""
 
 #: app/templates/search.html:4
@@ -210,6 +230,11 @@ msgstr ""
 
 #: app/templates/search.html:18
 msgid "Next results"
+msgstr ""
+
+#: app/templates/send_message.html:5
+#, python-format
+msgid "Send Message to %(recipient)s"
 msgstr ""
 
 #: app/templates/user.html:8
@@ -240,6 +265,10 @@ msgstr ""
 
 #: app/templates/user.html:19 app/templates/user_popup.html:16
 msgid "Unfollow"
+msgstr ""
+
+#: app/templates/user.html:22
+msgid "Send private message"
 msgstr ""
 
 #: app/templates/auth/login.html:12
@@ -277,4 +306,7 @@ msgstr ""
 #: app/templates/errors/500.html:5
 msgid "The administrator has been notified. Sorry for the inconvenience!"
 msgstr ""
+
+#~ msgid "Delete"
+#~ msgstr ""
 

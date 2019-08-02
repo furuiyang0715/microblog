@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-08-02 00:29+0800\n"
+"POT-Creation-Date: 2019-08-02 10:21+0800\n"
 "PO-Revision-Date: 2019-07-30 14:05+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -99,7 +99,7 @@ msgstr "密码已重置"
 msgid "About me"
 msgstr "关于我"
 
-#: app/main/forms.py:14 app/main/forms.py:29
+#: app/main/forms.py:14 app/main/forms.py:29 app/main/forms.py:48
 msgid "Submit"
 msgstr "提交"
 
@@ -107,9 +107,13 @@ msgstr "提交"
 msgid "Say something"
 msgstr "说点啥吧"
 
-#: app/main/forms.py:33 app/main/routes.py:164
+#: app/main/forms.py:33 app/main/routes.py:170
 msgid "Search"
 msgstr "搜索"
+
+#: app/main/forms.py:46
+msgid "Message"
+msgstr "发送私信"
 
 #: app/main/routes.py:28
 msgid "Your post is now live!"
@@ -154,6 +158,14 @@ msgstr "无法取关自己"
 msgid "You are not following %(username)s."
 msgstr "您正在取关 %(username)s"
 
+#: app/main/routes.py:193
+msgid "Your message has been sent."
+msgstr "消息已发送"
+
+#: app/main/routes.py:195
+msgid "Send Message"
+msgstr "发送私信"
+
 #: app/templates/_post.html:16
 #, python-format
 msgid "%(username)s said %(when)s"
@@ -162,10 +174,6 @@ msgstr "%(username)s 发布于 %(when)s"
 #: app/templates/_post.html:28
 msgid "Translate"
 msgstr "翻译"
-
-#: app/templates/_post.html:38
-msgid "Delete"
-msgstr "删除"
 
 #: app/templates/base.html:4
 msgid "Welcome to Microblog"
@@ -183,7 +191,11 @@ msgstr "个人中心"
 msgid "Logout"
 msgstr "登出"
 
-#: app/templates/base.html:83
+#: app/templates/base.html:48 app/templates/message.html:4
+msgid "Messages"
+msgstr "我的消息"
+
+#: app/templates/base.html:88
 msgid "Error: Could not contact server."
 msgstr "错误: 无法连接服务器"
 
@@ -192,13 +204,21 @@ msgstr "错误: 无法连接服务器"
 msgid "Hi, %(username)s!"
 msgstr "你好呀, %(username)s!"
 
-#: app/templates/index.html:17 app/templates/user.html:31
+#: app/templates/index.html:17 app/templates/user.html:34
 msgid "Newer posts"
 msgstr "最新发布"
 
-#: app/templates/index.html:22 app/templates/user.html:36
+#: app/templates/index.html:22 app/templates/user.html:39
 msgid "Older posts"
 msgstr "较早发布"
+
+#: app/templates/message.html:12
+msgid "Newer messages"
+msgstr "最新消息"
+
+#: app/templates/message.html:17
+msgid "Older messages"
+msgstr "较早消息"
 
 #: app/templates/search.html:4
 msgid "Search Results"
@@ -211,6 +231,11 @@ msgstr "上一批"
 #: app/templates/search.html:18
 msgid "Next results"
 msgstr "下一批"
+
+#: app/templates/send_message.html:5
+#, python-format
+msgid "Send Message to %(recipient)s"
+msgstr "发送私信给%(recipient)s"
 
 #: app/templates/user.html:8
 msgid "User"
@@ -241,6 +266,10 @@ msgstr "关注"
 #: app/templates/user.html:19 app/templates/user_popup.html:16
 msgid "Unfollow"
 msgstr "取关"
+
+#: app/templates/user.html:22
+msgid "Send private message"
+msgstr "发送私信"
 
 #: app/templates/auth/login.html:12
 msgid "New User?"
@@ -277,4 +306,7 @@ msgstr "发生未知错误"
 #: app/templates/errors/500.html:5
 msgid "The administrator has been notified. Sorry for the inconvenience!"
 msgstr "管理员已收到通知, 抱歉给你带来不便"
+
+#~ msgid "Delete"
+#~ msgstr "删除"
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import json
 from datetime import datetime
 from hashlib import md5
 from time import time
@@ -30,6 +30,37 @@ class User(UserMixin, db.Model):
         primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
+    # 添加一个新模型来跟踪所有用户的用户的通知以及用户模型中的关系
+    notifications = db.relationship('Notification', backref='user',
+                                    lazy='dynamic')
+
+    # 发出的私信
+    messages_sent = db.relationship('Message',
+                                    foreign_keys='Message.sender_id',
+                                    backref='author', lazy='dynamic')
+    # 收到的私信
+    messages_received = db.relationship('Message',
+                                        foreign_keys='Message.recipient_id',
+                                        backref='recipient', lazy='dynamic')
+    # 用户最后一次阅读自己私有消息的时间
+    last_message_read_time = db.Column(db.DateTime)
+
+    # 查询最新私信的数量
+    def new_messages(self):
+        last_read_time = self.last_message_read_time or datetime(1900, 1, 1)
+        return Message.query.filter_by(recipient=self).filter(
+            Message.timestamp > last_read_time).count()
+
+    # 处理通知对象
+    # 为用户添加通知给数据库
+    # 确保如果有相同的通知存在 则会首先删除该通知
+    def add_notification(self, name, data):
+        self.notifications.filter_by(name=name).delete()
+        n = Notification(name=name, payload_json=json.dumps(data), user=self, timestamp=time())
+        # print(n.timestamp)
+        # print("添加一条未读消息")
+        db.session.add(n)
+        return n
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -80,6 +111,18 @@ class User(UserMixin, db.Model):
         return User.query.get(id)
 
 
+# 用户通知类
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128), index=True)  # 名称
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # 关联用户
+    timestamp = db.Column(db.Float, index=True, default=time)  # 时间戳 TODO 没有设置成功
+    payload_json = db.Column(db.Text)  # 有效荷载
+
+    def get_data(self):
+        return json.loads(str(self.payload_json))
+
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
@@ -124,6 +167,17 @@ class SearchableMixin(object):
     def reindex(cls):
         for obj in cls.query:
             add_to_index(cls.__tablename__, obj)
+
+
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    body = db.Column(db.String(140))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return '<Message {}>'.format(self.body)
 
 
 class Post(SearchableMixin, db.Model):
