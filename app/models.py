@@ -56,9 +56,9 @@ class User(UserMixin, db.Model):
     # 确保如果有相同的通知存在 则会首先删除该通知
     def add_notification(self, name, data):
         self.notifications.filter_by(name=name).delete()
-        n = Notification(name=name, payload_json=json.dumps(data), user=self, timestamp=time())
-        # print(n.timestamp)
-        # print("添加一条未读消息")
+        n = Notification(name=name, payload_json=json.dumps(data), user=self,
+                         timestamp=time()
+                         )
         db.session.add(n)
         return n
 

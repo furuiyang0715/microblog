@@ -29,3 +29,11 @@ class Config(object):
     ELASTICSEARCH_URL = None
     BABEL_DEFAULT_LOCALE = "zh"
 
+    # 七牛云存储的AccessKey/SecretKey
+    QINIU_ACCESS_KEY = "odFMFZXhkObsy3hHJ9SvFMFkiIa6DJxb3GOBXjSg"
+    QINIU_SECRET_KEY = "rCbbUAP6Taaq10XZZrAyGWxTk5d-nu0GSItbgjwz"
+
+    # 要上传的七牛云空间
+    QINIU_BUCKET_NAME = "furuiyang-microblog"
+
+

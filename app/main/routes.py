@@ -178,8 +178,6 @@ def user_popup(username):
     return render_template('user_popup.html', user=user)
 
 
-# 处理实际发送的私有消息
-# 发送私有消息的逻辑只需要在数据库中添加一个新的消息实例即可
 @bp.route('/send_message/<recipient>', methods=['GET', 'POST'])
 @login_required
 def send_message(recipient):
@@ -190,8 +188,10 @@ def send_message(recipient):
                       body=form.message.data)
         db.session.add(msg)
         # 增加接收人的未读消息的数量
-        user.add_notification('unread_message_count', user.new_messages())
+        n = user.add_notification('unread_message_count', user.new_messages())
+        # print("------------->", n.timestamp, user.new_messages())
         db.session.commit()
+        # print("==============", n.timestamp, user.new_messages())
         flash(_('Your message has been sent.'))
         return redirect(url_for('main.user', username=recipient))
     return render_template('send_message.html', title=_('Send Message'),
