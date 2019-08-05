@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from app import create_app, db, cli
-from app.models import User, Post, Notification, Message
+from app.models import User, Post, Notification, Message, Task
 
 app = create_app()
 cli.register(app)
@@ -10,4 +10,4 @@ cli.register(app)
 def make_shell_context():
     # 将相关的模型添加到 shell 上下文
     return {'db': db, 'User': User, 'Post': Post, 'Message': Message,
-            'Notification': Notification}
+            'Notification': Notification, 'Task': Task}

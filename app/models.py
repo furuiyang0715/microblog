@@ -3,6 +3,9 @@ import json
 from datetime import datetime
 from hashlib import md5
 from time import time
+
+import redis
+import rq
 from flask import current_app
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -44,6 +47,8 @@ class User(UserMixin, db.Model):
                                         backref='recipient', lazy='dynamic')
     # 用户最后一次阅读自己私有消息的时间
     last_message_read_time = db.Column(db.DateTime)
+
+    tasks = db.relationship('Task', backref='user', lazy='dynamic')
 
     # 查询最新私信的数量
     def new_messages(self):
@@ -109,6 +114,21 @@ class User(UserMixin, db.Model):
         except:
             return
         return User.query.get(id)
+
+    def launch_task(self, name, description, *args, **kwargs):
+        rq_job = current_app.task_queue.enqueue('app.tasks.' + name, self.id,
+                                                *args, **kwargs)
+        task = Task(id=rq_job.get_id(), name=name, description=description,
+                    user=self)
+        db.session.add(task)
+        return task
+
+    def get_tasks_in_progress(self):
+        return Task.query.filter_by(user=self, complete=False).all()
+
+    def get_task_in_progress(self, name):
+        return Task.query.filter_by(name=name, user=self,
+                                    complete=False).first()
 
 
 # 用户通知类
@@ -190,6 +210,30 @@ class Post(SearchableMixin, db.Model):
 
     def __repr__(self):
         return '<Post {}>'.format(self.body)
+
+
+class Task(db.Model):
+    # 使用由RQ生成的作业标识符作主键
+    id = db.Column(db.String(36), primary_key=True)
+    name = db.Column(db.String(128), index=True)
+    description = db.Column(db.String(128))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    complete = db.Column(db.Boolean, default=False)
+
+    def get_rq_job(self):
+        """
+        get_rq_job()辅助方法可以用给定的任务ID加载RQJob实例
+        :return:
+        """
+        try:
+            rq_job = rq.job.Job.fetch(self.id, connection=current_app.redis)
+        except (redis.exceptions.RedisError, rq.exceptions.NoSuchJobError):
+            return None
+        return rq_job
+
+    def get_progress(self):
+        job = self.get_rq_job()
+        return job.meta.get('progress', 0) if job is not None else 100
 
 
 # 添加监听

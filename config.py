@@ -13,10 +13,12 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
     MAIL_PORT = int(os.environ.get('MAIL_PORT') or 25)
-    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS') is not None
+    # MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS') is not None
+    MAIL_USE_SSL = True
+    MAIL_USE_TLS = False
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    ADMINS = ['your-email@example.com']
+    ADMINS = ['15626046299@163.com']
     LANGUAGES = ['en', 'es', 'zh']
     MS_TRANSLATOR_KEY = os.environ.get('MS_TRANSLATOR_KEY')
     YOUDAO_URL = os.environ.get("YOUDAO_URL")
@@ -35,5 +37,10 @@ class Config(object):
 
     # 要上传的七牛云空间
     QINIU_BUCKET_NAME = "furuiyang-microblog"
+
+    # Redis连接URL将来自环境变量，如果该变量未定义，
+    # 则会假定该服务在当前主机的默认端口上运行并使用默认URL。
+    REDIS_URL = os.environ.get('REDIS_URL') or 'redis://127.0.0.1:6379'
+
 
 

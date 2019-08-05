@@ -3,6 +3,7 @@ import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
 
+import rq
 from elasticsearch import Elasticsearch
 from flask import Flask, request, current_app, session
 from flask_sqlalchemy import SQLAlchemy
@@ -12,6 +13,8 @@ from flask_mail import Mail
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from flask_babel import Babel, lazy_gettext as _l
+from redis import Redis
+
 from config import Config
 
 db = SQLAlchemy()
@@ -36,6 +39,11 @@ def create_app(config_class=Config):
     bootstrap.init_app(app)
     moment.init_app(app)
     babel.init_app(app)
+
+    app.redis = Redis.from_url(app.config['REDIS_URL'])
+    # app.task_queue将成为提交任务的队列
+    # 将队列附加到应用上会提供很大的便利，因为我可以在应用的任何地方使用current_app.task_queue来访问它
+    app.task_queue = rq.Queue('microblog-tasks', connection=app.redis)
 
     # 添加一个 es 的实例
     # Python 对象在结构上并不严格 可以随时添加新属性

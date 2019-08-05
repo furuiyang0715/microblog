@@ -1,7 +1,9 @@
 FLASK_APP=microblog.py
 export FLASK_DEBUG=1
-export MAIL_SERVER=localhost
-export MAIL_PORT=8025
+export MAIL_SERVER=smtp.163.com
+export MAIL_PORT=465
+export MAIL_USERNAME=15626046299@163.com
+export MAIL_PASSWORD=044610Fa
 export MS_TRANSLATOR_KEY=2463e5b388564adab43d74902815cf8c
 export YOUDAO_URL=https://openapi.youdao.com/api
 export YOUDAO_APP_KEY=0c5da03940d46b17

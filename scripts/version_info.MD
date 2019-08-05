@@ -12,6 +12,7 @@
 - 时间日期国际化显示的 bug 修复
 
 ### 8.2 更新 
+- 新增私信和用户通知（暂不可回复私信）
 
 
 
@@ -60,3 +61,8 @@ furuiyang/microblog:latest
 - 更新国际化语言包： 
 - flask translate update 
 - flask translate compile
+- 开放内网所有主机的开放权限： flask run --host=0.0.0.0
+- 在本地运行一个模拟的电子邮件服务器，使用 python 的 SMPT 调试服务器，
+它接受电子邮件，然后打印到控制台。要运行此服务器，需要在终端运行： 
+python -m smtpd -n -c DebuggingServer localhost:8025
+要用这个模拟邮件服务器来测试应用，那么你将设置MAIL_SERVER=localhost和MAIL_PORT=8025。
