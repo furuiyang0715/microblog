@@ -66,3 +66,4 @@ furuiyang/microblog:latest
 它接受电子邮件，然后打印到控制台。要运行此服务器，需要在终端运行： 
 python -m smtpd -n -c DebuggingServer localhost:8025
 要用这个模拟邮件服务器来测试应用，那么你将设置MAIL_SERVER=localhost和MAIL_PORT=8025。
+- 在 linux 上全局查找文件： find / -name redis.conf

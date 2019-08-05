@@ -116,17 +116,39 @@ class User(UserMixin, db.Model):
         return User.query.get(id)
 
     def launch_task(self, name, description, *args, **kwargs):
+        """
+        负责将任务提交到 RQ 队列 并将其添加到数据库中
+        :param name: 函数名称
+        :param description:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        # 构建符合规范的函数名称并且使用队列的 enqueue 来提交作业以及相关参数
         rq_job = current_app.task_queue.enqueue('app.tasks.' + name, self.id,
                                                 *args, **kwargs)
+        # descirption 是呈现给用户的任务的友好描述
         task = Task(id=rq_job.get_id(), name=name, description=description,
                     user=self)
+        # 添加会话但是暂时不发生提交行为
+        # 一般来说，最好在更高层次函数中的数据库会话上进行操作，因为它允许你在单个事务中组合由较低级别函数所做的多个更新
+        # 这不是一个严格的规则
         db.session.add(task)
         return task
 
     def get_tasks_in_progress(self):
+        """
+        返回用户未完成任务的列表
+        :return:
+        """
         return Task.query.filter_by(user=self, complete=False).all()
 
     def get_task_in_progress(self, name):
+        """
+        确定前一个任务是否还在运行
+        :param name:
+        :return:
+        """
         return Task.query.filter_by(name=name, user=self,
                                     complete=False).first()
 
@@ -214,10 +236,13 @@ class Post(SearchableMixin, db.Model):
 
 class Task(db.Model):
     # 使用由RQ生成的作业标识符作主键
+    # 存储的是符合命名规范的名称（会传递给 RQ），
+    # 适应于向用户显示的任务描述，该任务所属的用户关系以及任务是否已经完成的布尔值
     id = db.Column(db.String(36), primary_key=True)
     name = db.Column(db.String(128), index=True)
     description = db.Column(db.String(128))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    # 将正在运行的任务与已经完成的任务分开 运行中的任务需要特殊处理才能显示最新进度
     complete = db.Column(db.Boolean, default=False)
 
     def get_rq_job(self):
@@ -226,12 +251,22 @@ class Task(db.Model):
         :return:
         """
         try:
+            # 从 redis 中存在的数据中加载 Job 实例
             rq_job = rq.job.Job.fetch(self.id, connection=current_app.redis)
         except (redis.exceptions.RedisError, rq.exceptions.NoSuchJobError):
             return None
         return rq_job
 
     def get_progress(self):
+        """
+        建立在 get_job() 之上 返回任务的进度百分比
+        在这里我们假设：
+        （1） 如果模型中的作业 ID 不存在于 RQ 队列中 则表示作业已经完成并且数据已经过期并已经从队列中删除
+             在这种情况下返回的 百分比为 100%
+        （2） 如果job 存在，但是meta 属性中找不到进度相关的信息，我们安全地假定该 job 计划运行，但是还没有启动。
+             在这种情况下返回的 百分比为 0.
+        :return:
+        """
         job = self.get_rq_job()
         return job.meta.get('progress', 0) if job is not None else 100
 

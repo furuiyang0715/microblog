@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-08-02 10:21+0800\n"
+"POT-Creation-Date: 2019-08-05 14:41+0800\n"
 "PO-Revision-Date: 2019-07-30 14:05+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.7.0\n"
 
-#: app/__init__.py:21
+#: app/__init__.py:24
 msgid "Please log in to access this page."
 msgstr "请登录后访问该页面"
 
@@ -158,13 +158,21 @@ msgstr "无法取关自己"
 msgid "You are not following %(username)s."
 msgstr "您正在取关 %(username)s"
 
-#: app/main/routes.py:193
+#: app/main/routes.py:195
 msgid "Your message has been sent."
 msgstr "消息已发送"
 
-#: app/main/routes.py:195
+#: app/main/routes.py:197
 msgid "Send Message"
 msgstr "发送私信"
+
+#: app/main/routes.py:246
+msgid "An export task is currently in progress"
+msgstr "已有一个导出任务正在运行"
+
+#: app/main/routes.py:248
+msgid "Exporting posts..."
+msgstr "正在导出..."
 
 #: app/templates/_post.html:16
 #, python-format
@@ -191,11 +199,11 @@ msgstr "个人中心"
 msgid "Logout"
 msgstr "登出"
 
-#: app/templates/base.html:48 app/templates/message.html:4
+#: app/templates/base.html:48 app/templates/messages.html:4
 msgid "Messages"
 msgstr "我的消息"
 
-#: app/templates/base.html:88
+#: app/templates/base.html:115
 msgid "Error: Could not contact server."
 msgstr "错误: 无法连接服务器"
 
@@ -204,19 +212,19 @@ msgstr "错误: 无法连接服务器"
 msgid "Hi, %(username)s!"
 msgstr "你好呀, %(username)s!"
 
-#: app/templates/index.html:17 app/templates/user.html:34
+#: app/templates/index.html:17 app/templates/user.html:43
 msgid "Newer posts"
 msgstr "最新发布"
 
-#: app/templates/index.html:22 app/templates/user.html:39
+#: app/templates/index.html:22 app/templates/user.html:48
 msgid "Older posts"
 msgstr "较早发布"
 
-#: app/templates/message.html:12
+#: app/templates/messages.html:12
 msgid "Newer messages"
 msgstr "最新消息"
 
-#: app/templates/message.html:17
+#: app/templates/messages.html:17
 msgid "Older messages"
 msgstr "较早消息"
 
@@ -259,15 +267,19 @@ msgstr "关注: %(count)d"
 msgid "Edit your profile"
 msgstr "编辑个人资料"
 
-#: app/templates/user.html:17 app/templates/user_popup.html:14
+#: app/templates/user.html:20
+msgid "Export your posts"
+msgstr "导出我的动态"
+
+#: app/templates/user.html:26 app/templates/user_popup.html:14
 msgid "Follow"
 msgstr "关注"
 
-#: app/templates/user.html:19 app/templates/user_popup.html:16
+#: app/templates/user.html:28 app/templates/user_popup.html:16
 msgid "Unfollow"
 msgstr "取关"
 
-#: app/templates/user.html:22
+#: app/templates/user.html:31
 msgid "Send private message"
 msgstr "发送私信"
 
