@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-load_dotenv(os.path.join(basedir, '.env'))
+load_dotenv(os.path.join(basedir, '.flaskenv'))
 
 
 class Config(object):
@@ -41,6 +41,10 @@ class Config(object):
     # Redis连接URL将来自环境变量，如果该变量未定义，
     # 则会假定该服务在当前主机的默认端口上运行并使用默认URL。
     REDIS_URL = os.environ.get('REDIS_URL') or 'redis://47.107.180.248:6379'
+    # REDIS_URL = os.environ.get('REDIS_URL') or 'redis://127.0.0.1:6379'
+
+    # 是否在控制台显示日志
+    LOG_TO_STDOUT = True
 
 
 

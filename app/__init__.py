@@ -1,10 +1,6 @@
-# -*- coding: utf-8 -*-
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
-
-import rq
-from elasticsearch import Elasticsearch
 from flask import Flask, request, current_app, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -13,8 +9,9 @@ from flask_mail import Mail
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from flask_babel import Babel, lazy_gettext as _l
+from elasticsearch import Elasticsearch
 from redis import Redis
-
+import rq
 from config import Config
 
 db = SQLAlchemy()
@@ -39,16 +36,10 @@ def create_app(config_class=Config):
     bootstrap.init_app(app)
     moment.init_app(app)
     babel.init_app(app)
-
-    app.redis = Redis.from_url(app.config['REDIS_URL'])
-    # app.task_queue将成为提交任务的队列
-    # 将队列附加到应用上会提供很大的便利，因为我可以在应用的任何地方使用current_app.task_queue来访问它
-    app.task_queue = rq.Queue('microblog-tasks', connection=app.redis)
-
-    # 添加一个 es 的实例
-    # Python 对象在结构上并不严格 可以随时添加新属性
     app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']]) \
         if app.config['ELASTICSEARCH_URL'] else None
+    app.redis = Redis.from_url(app.config['REDIS_URL'])
+    app.task_queue = rq.Queue('microblog-tasks', connection=app.redis)
 
     from app.errors import bp as errors_bp
     app.register_blueprint(errors_bp)
@@ -76,15 +67,20 @@ def create_app(config_class=Config):
             mail_handler.setLevel(logging.ERROR)
             app.logger.addHandler(mail_handler)
 
-        if not os.path.exists('logs'):
-            os.mkdir('logs')
-        file_handler = RotatingFileHandler('logs/microblog.log',
-                                           maxBytes=10240, backupCount=10)
-        file_handler.setFormatter(logging.Formatter(
-            '%(asctime)s %(levelname)s: %(message)s '
-            '[in %(pathname)s:%(lineno)d]'))
-        file_handler.setLevel(logging.INFO)
-        app.logger.addHandler(file_handler)
+        if app.config['LOG_TO_STDOUT']:
+            stream_handler = logging.StreamHandler()
+            stream_handler.setLevel(logging.INFO)
+            app.logger.addHandler(stream_handler)
+        else:
+            if not os.path.exists('logs'):
+                os.mkdir('logs')
+            file_handler = RotatingFileHandler('logs/microblog.log',
+                                               maxBytes=10240, backupCount=10)
+            file_handler.setFormatter(logging.Formatter(
+                '%(asctime)s %(levelname)s: %(message)s '
+                '[in %(pathname)s:%(lineno)d]'))
+            file_handler.setLevel(logging.INFO)
+            app.logger.addHandler(file_handler)
 
         app.logger.setLevel(logging.INFO)
         app.logger.info('Microblog startup')
@@ -94,11 +90,7 @@ def create_app(config_class=Config):
 
 @babel.localeselector
 def get_locale():
-    # print(f"==========={session.get('lang')}==============")
-
     return session.get('lang')
-
-    # return 'zh'
     # return request.accept_languages.best_match(current_app.config['LANGUAGES'])
 
 
