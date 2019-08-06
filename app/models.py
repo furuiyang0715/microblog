@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
+import base64
 import json
-from datetime import datetime
+import os
+from datetime import datetime, timedelta
 from hashlib import md5
 from time import time
 
 import redis
 import rq
-from flask import current_app
+from flask import current_app, url_for
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
@@ -20,7 +22,41 @@ followers = db.Table(
 )
 
 
-class User(UserMixin, db.Model):
+class PaginatedAPIMixin(object):
+    @staticmethod
+    def to_collection_dict(query, page, per_page, endpoint, **kwargs):
+        """
+        query page 和 per_page 是 Flask-SQLAlchemy查询对象 页码 以及每页的数据数量
+        这三个参数决定了要返回的参数是什么
+        :param query:
+        :param page:
+        :param per_page:
+        :param endpoint: 根据该值决定需要发送到 url_for 的视图函数
+        :param kwargs: endpoint 路由的更多参数
+        :return:
+        """
+        resources = query.paginate(page, per_page, False)
+        data = {
+            'items': [item.to_dict() for item in resources.items],
+            '_meta': {
+                'page': page,
+                'per_page': per_page,
+                'total_pages': resources.pages,
+                'total_items': resources.total
+            },
+            '_links': {
+                'self': url_for(endpoint, page=page, per_page=per_page,
+                                **kwargs),
+                'next': url_for(endpoint, page=page + 1, per_page=per_page,
+                                **kwargs) if resources.has_next else None,
+                'prev': url_for(endpoint, page=page - 1, per_page=per_page,
+                                **kwargs) if resources.has_prev else None
+            }
+        }
+        return data
+
+
+class User(PaginatedAPIMixin, UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
@@ -49,6 +85,10 @@ class User(UserMixin, db.Model):
     last_message_read_time = db.Column(db.DateTime)
 
     tasks = db.relationship('Task', backref='user', lazy='dynamic')
+
+    # 用户 token 以及用户 token 的过期时间
+    token = db.Column(db.String(32), index=True, unique=True)
+    token_expiration = db.Column(db.DateTime)
 
     # 查询最新私信的数量
     def new_messages(self):
@@ -151,6 +191,82 @@ class User(UserMixin, db.Model):
         """
         return Task.query.filter_by(name=name, user=self,
                                     complete=False).first()
+
+    def to_dict(self, include_email=False):
+        """
+        将用户信息封装成一个 json 字典
+        之后会被转换为 json 传输
+        :param include_email: 只有用户请求自己的数据时才包含点电子邮件
+        :return:
+        """
+        data = {
+            'id': self.id,
+            'username': self.username,
+            # 对于时间 将使用 ISO 8601 格式
+            # Python的datetime对象可以通过isoformat()方法生成这样格式的字符串。
+            # 但是因为我使用的datetime对象的时区是UTC，且但没有在其状态中记录时区，
+            # 所以我需要在末尾添加Z，即ISO 8601的UTC时区代码。
+            'last_seen': self.last_seen.isoformat() + 'Z',   # 上次访问时间
+            'about_me': self.about_me,
+            'post_count': self.posts.count(),
+            'follower_count': self.followers.count(),
+            'followed_count': self.followed.count(),
+            '_links': {
+                'self': url_for('api.get_user', id=self.id),
+                'followers': url_for('api.get_followers', id=self.id),
+                'followed': url_for('api.get_followed', id=self.id),
+                # TODO 头像暂时是 应用外部的Gravatar URL
+                'avatar': self.avatar(128)
+            }
+        }
+        if include_email:
+            data['email'] = self.email
+        return data
+
+    def from_dict(self, data, new_user=False):
+        """
+        实现从 python 字典向 User 对象的转换
+        :param data:
+        :param new_user:
+        :return:
+        """
+
+        for field in ['username', 'email', 'about_me']:
+            if field in data:
+                # 在对象相应的属性中设置新值
+                setattr(self, field, data[field])
+        if new_user and 'password' in data:
+            # password 不是对象中的字段
+            # 调用 set_password 来创建密码哈希
+            self.set_password(data['password'])
+
+    def get_token(self, expires_in=3600):
+        now = datetime.utcnow()
+        # token 未过期的情况
+        if self.token and self.token_expiration > now + timedelta(seconds=60):
+            return self.token
+        # 重新生成 token
+        self.token = base64.b64encode(os.urandom(24)).decode('utf-8')
+        # 重新设置 token 的过期时间 通常为生成时间之后 3600 s
+        self.token_expiration = now + timedelta(seconds=expires_in)
+        db.session.add(self)
+        return self.token
+
+    def revoke_token(self):
+        # 使分配给用户的 token 失效
+        self.token_expiration = datetime.utcnow() - timedelta(seconds=1)
+
+    @staticmethod
+    def check_token(token):
+        """
+        它将一个token作为参数传入并返回此token所属的用户。 如果token无效或过期，则该方法返回None。
+        :param token:
+        :return:
+        """
+        user = User.query.filter_by(token=token).first()
+        if user is None or user.token_expiration < datetime.utcnow():
+            return None
+        return user
 
 
 # 用户通知类
