@@ -14,6 +14,9 @@
 ### 8.2 更新 
 - 新增私信和用户通知（暂不可回复私信）
 
+### 8.6 更新
+修复密码的邮件追回 
+增加动态导出
 
 
 ### 部署流程 
@@ -28,11 +31,11 @@ docker run -d --name elasticsearch -p 9200:9200 -p 9300:9300 elasticsearch:6.8.1
 
 #### RQ worker 服务
 ```
-docker run --name blogworker -d --rm -e SECRET_KEY=ruiyang -e MAIL_SERVER=smtp.163.com \
+docker run --name blogworker -d -e SECRET_KEY=ruiyang -e MAIL_SERVER=smtp.163.com \
 -e MAIL_PORT=465 -e MAIL_USE_TLS=true -e MAIL_USERNAME=15626046299@163.com \ 
 -e MAIL_PASSWORD=044610Fa -e DATABASE_URL=mysql+pymysql://root:ruiyang@47.107.180.248/microblog \ 
 -e REDIS_URL=redis://47.107.180.248:6379/0 \
---entrypoint venv/bin/rq microblog:latest worker -u redis://47.107.180.248:6379/0 microblog-tasks
+--entrypoint venv/bin/rq furuiyang/microblog:latest worker -u redis://47.107.180.248:6379/0 microblog-tasks
 ```
 --entrypoint 参数只取得可执行文件的名称
 但是参数如果有的话，需要在镜像和标签之后，也就是在命令行的结尾处给出。
@@ -60,8 +63,9 @@ docker pull furuiyang/microblog:latest
 docker run --name microblog -d -p 8000:5000 --rm -e SECRET_KEY=ruiyang -e MAIL_SERVER=smtp.163.com \
 -e MAIL_PORT=465 -e MAIL_USE_TLS=true -e MAIL_USERNAME=15626046299@163.com -e MAIL_PASSWORD=044610Fa \
 -e DATABASE_URL=mysql+pymysql://root:ruiyang@47.107.180.248/microblog -e REDIS_URL=redis://47.107.180.248:6379/0 \
--e YOUDAO_URL=https://openapi.youdao.com/api -e YOUDAO_APP_KEY=0c5da03940d46b17 -e YOUDAO_APP_SECRET=bFsRiYrXoBK9sWI4nYTaMdf6fobMfhUv \
-microblog:latest
+-e YOUDAO_URL=https://openapi.youdao.com/api -e YOUDAO_APP_KEY=0c5da03940d46b17 -e \
+YOUDAO_APP_SECRET=bFsRiYrXoBK9sWI4nYTaMdf6fobMfhUv \
+furuiyang/microblog:latest
 ``
 
 
